@@ -10,20 +10,21 @@ import AuthService from '../../../../services/auth/AuthService'
 import { Typography } from '@material-ui/core'
 import ConnectionService from '../../../../services/connection/ConnectionService'
 import './styles.css'
-import { useGoogleAuth2 } from '../../../../context_provider/google_auth2'
+import { useGoogleOAuth2 } from '../../../../context_provider/google_oauth2'
 
 const GoogleLoginButton: React.FC<LoginButtonProps> = ({
   onCancel,
   onDinoAPIFail,
   onGoogleFail,
   onRefreshTokenLostError,
+  onUnknowError,
   text,
   size
 }) => {
   const languageContext = useLanguage()
   const language = languageContext.current
   const alert = useAlert()
-  const googleAuth2 = useGoogleAuth2()
+  const googleOAuth2 = useGoogleOAuth2()
 
   const [loading, setLoading] = useState(false)
 
@@ -48,7 +49,9 @@ const GoogleLoginButton: React.FC<LoginButtonProps> = ({
   const handleLoginButtonClick = async () => {
     setLoading(true)
 
-    const status = await AuthService.requestGoogleLogin(googleAuth2)
+    const status = await AuthService.requestGoogleLogin(googleOAuth2)
+
+    console.log(status)
 
     if (status === LoginStatusConstants.SUCCESS) {
       return
@@ -64,6 +67,8 @@ const GoogleLoginButton: React.FC<LoginButtonProps> = ({
       onRefreshTokenLostError && onRefreshTokenLostError()
     } else if (status === LoginStatusConstants.DISCONNECTED) {
       showOfflineMessage()
+    } else if (status === LoginStatusConstants.UNKNOW_ERROR) {
+      onUnknowError && onUnknowError()
     }
 
     setLoading(false)
@@ -82,7 +87,7 @@ const GoogleLoginButton: React.FC<LoginButtonProps> = ({
           imageAlt={text}
           className="google_login_button__button"
           onClick={isConnected ? handleLoginButtonClick : showOfflineMessage}
-          disabled={!isConnected || googleAuth2 === undefined}
+          disabled={!isConnected || googleOAuth2 === undefined}
         >
           <Typography component="p">{text}</Typography>
         </Button>

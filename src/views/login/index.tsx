@@ -30,6 +30,10 @@ const Login = (): JSX.Element => {
     alert.showInfoAlert(language.LOGIN_CANCELED)
   }
 
+  const showAlertUnknowError = () => {
+    alert.showErrorAlert(language.UNKNOW_ERROR)
+  }
+
   const renderLoginButton = (): JSX.Element => (
     <GoogleLoginButton
       size="large"
@@ -37,6 +41,7 @@ const Login = (): JSX.Element => {
       onDinoAPIFail={showAlertDinoFail}
       onGoogleFail={showAlertGoogleFail}
       onRefreshTokenLostError={showAlertRefreshError}
+      onUnknowError={showAlertUnknowError}
       text={language.LOGIN_BUTTON_TEXT}
     />
   )

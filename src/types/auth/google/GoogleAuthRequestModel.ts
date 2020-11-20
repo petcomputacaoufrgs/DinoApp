@@ -1,8 +1,16 @@
 class GoogleAuthRequestModel {
-  token: string
+  idToken: string
+  name: string
+  email: string
+  pictureUrl: string
 
-  constructor(token: string) {
-    this.token = token
+  constructor(googleResponse) {
+    const authData = googleResponse.getAuthResponse()
+    const userData = googleResponse.getBasicProfile()
+    this.idToken = authData.id_token
+    this.name = userData.getName()
+    this.email = userData.getEmail()
+    this.pictureUrl = userData.getImageUrl()
   }
 }
 

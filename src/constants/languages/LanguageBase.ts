@@ -14,6 +14,7 @@ export default interface LanguageBase {
   LOGIN_FAIL_BY_GOOGLE: string
   LOGIN_FAIL_BY_API: string
   LOGIN_CANCELED: string
+  UNKNOW_ERROR: string
   LOGIN_REFRESH_NECESSARY: string
   AVATAR_ALT: string
   LOGOUT_DIALOG_QUESTION: string

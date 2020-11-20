@@ -5,14 +5,13 @@ import AuthLocalStorage from '../../local_storage/auth/AuthLocalStorage'
 import AuthResponseModel from '../../types/auth/AuthResponseModel'
 import GoogleAuthScopes from '../../constants/google/GoogleAuthScopes'
 import LoginStatusConstants from '../../constants/login/LoginErrorConstants'
-import GoogleAuthResponseModel from '../../types/auth/google/GoogleAuthResponseModel'
 import UserService from '../user/UserService'
 import DinoAgentService from '../../agent/DinoAgentService'
 import EventService from '../events/EventService'
 import LogAppErrorService from '../log_app_error/LogAppErrorService'
 import WebSocketAuthResponseModel from '../../types/auth/web_socket/WebSocketAuthResponseModel'
 import GoogleOAuth2Service from './google/GoogleOAuth2Service'
-import GoogleAuth2ContextType from '../../types/context_provider/GoogleAuth2ContextType'
+import GoogleOAuth2ContextType from '../../types/context_provider/GoogleOAuth2ContextType'
 
 class AuthService {
   cleanLoginGarbage = () => {
@@ -23,10 +22,19 @@ class AuthService {
     return GoogleAuthScopes.SCOPE_PROFILE
   }
 
-  requestGoogleLogin = async (googleAuth2: GoogleAuth2ContextType): Promise<number> => {
+  requestGoogleLogin = async (googleAuth2: GoogleOAuth2ContextType): Promise<number> => {
+    try {
+      const response = await GoogleOAuth2Service.requestLogin(googleAuth2)
+      return this.completeLoginWithDinoAPI(response)
+    } catch (e) {
+      return LoginStatusConstants.LOGIN_CANCELED
+    }
+  }
+
+  requestGoogleGrant = async (googleAuth2: GoogleOAuth2ContextType): Promise<number> => {
     try {
       const authCode = await GoogleOAuth2Service.requestLogin(googleAuth2)
-      return this.googleLoginOnDinoAPI(authCode)
+      return this.completeLoginWithDinoAPI(authCode)
     } catch (e) {
       return LoginStatusConstants.LOGIN_CANCELED
     }
@@ -84,14 +92,6 @@ class AuthService {
     AuthLocalStorage.setGoogleAccessToken(token)
   }
 
-  getGoogleExpiresDate = (): number | null => {
-    return AuthLocalStorage.getGoogleExpiresDate()
-  }
-
-  setGoogleExpiresDate = (tokenExpiresDate: number) => {
-    AuthLocalStorage.setGoogleExpiresDate(tokenExpiresDate)
-  }
-
   getAuthToken = (): string => {
     return AuthLocalStorage.getAuthToken()
   }
@@ -111,16 +111,6 @@ class AuthService {
     AuthLocalStorage.removeUserData()
   }
 
-  setRefreshRequiredToTrue = () => {
-    AuthLocalStorage.setRefreshRequiredToTrue()
-  }
-
-  setRefreshRequiredToFalse = () => {
-    AuthLocalStorage.setRefreshRequiredToFalse()
-  }
-
-  isRefreshRequired = (): boolean => AuthLocalStorage.isRefreshRequired()
-
   isRefreshingAccessToken = (): boolean =>
     AuthLocalStorage.isRefreshingAccessToken()
 
@@ -138,78 +128,60 @@ class AuthService {
     AuthLocalStorage.setRefreshingAccessToken(false)
   }
 
-  isRefreshingGoogleAccessToken = (): boolean =>
-    AuthLocalStorage.isRefreshingGoogleAccessToken()
-
-  startRefreshingGoogleAccessToken = () => {
-    AuthLocalStorage.removeSuccessRefreshingGoogleAccessToken()
-    AuthLocalStorage.setRefreshingGoogleAccessToken(true)
-  }
-
-  successRefreshingGoogleAccessToken = (): boolean => {
-    return AuthLocalStorage.successRefreshingGoogleAccessToken()
-  }
-
-  stopRefreshingGoogleAccessToken = (success: boolean) => {
-    AuthLocalStorage.setSuccessRefreshingGoogleAccessToken(success)
-    AuthLocalStorage.setRefreshingGoogleAccessToken(false)
-  }
-
-  private googleLoginOnDinoAPI = async (
-    code: string
+  private completeLoginWithDinoAPI = async (
+    googleResponse: any
   ): Promise<number> => {
-    if (code) {
-      const authRequestModel = new GoogleAuthRequestModel(code)
+    if (googleResponse) {
+      const authRequestModel = new GoogleAuthRequestModel(googleResponse)
 
       try {
         const request = await DinoAgentService.post(
           DinoAPIURLConstants.AUTH_GOOGLE
         )
 
-        if (request.canGo) {
+        if (request.canGo) {  
           const response = await request.setBody(authRequestModel).go()
 
           if (response.status === HttpStatus.OK) {
-            AuthLocalStorage.cleanLoginGarbage()
-            this.setRefreshRequiredToFalse()
-
-            this.saveGoogleAuthDataFromRequestBody(
-              response.body as GoogleAuthResponseModel
-            )
-
-            EventService.whenLogin()
-
-            return LoginStatusConstants.SUCCESS
+            return this.handleLoginSuccess(response, googleResponse)
           }
 
-          if (response?.status === HttpStatus.NON_AUTHORITATIVE_INFORMATION) {
-            this.setRefreshRequiredToTrue()
-            return LoginStatusConstants.REFRESH_TOKEN_REFRESH_NECESSARY
+          if (response.status === HttpStatus.INTERNAL_SERVER_ERROR) {
+            return LoginStatusConstants.UNKNOW_API_ERROR
           }
         }
 
         return LoginStatusConstants.DISCONNECTED
       } catch (e) {
         LogAppErrorService.saveError(e)
-        return LoginStatusConstants.UNKNOW_API_ERROR
+        return LoginStatusConstants.UNKNOW_ERROR
       }
     }
 
     return LoginStatusConstants.EXTERNAL_SERVICE_ERROR
   }
 
-  private saveGoogleAuthDataFromRequestBody(
-    responseBody: GoogleAuthResponseModel
-  ) {
-    this.setGoogleAccessToken(responseBody.googleAccessToken)
-    this.setGoogleExpiresDate(responseBody.googleExpiresDate)
-    this.saveUserAuthDataFromRequestBody(responseBody)
+  private handleLoginSuccess = (apiResponse, googleResponse): number => {
+    AuthLocalStorage.cleanLoginGarbage()
+
+    this.saveAuthDataFromAPIResponse(googleResponse)
+
+    this.saveUserDataFromAPIResponse(apiResponse.body)
+
+    EventService.whenLogin()
+
+    return LoginStatusConstants.SUCCESS
   }
 
-  private saveUserAuthDataFromRequestBody(responseBody: AuthResponseModel) {
-    AuthLocalStorage.setAuthToken(responseBody.accessToken)
-    AuthLocalStorage.setAuthTokenExpiresDate(responseBody.expiresDate)
-    UserService.saveUserDataFromModel(responseBody.user)
+  private saveAuthDataFromAPIResponse(googleResponse) {
+    const authResponse = googleResponse.getAuthResponse()
+    this.setGoogleAccessToken(authResponse.access_token)
+  }
+
+  private saveUserDataFromAPIResponse(response: AuthResponseModel) {
+    AuthLocalStorage.setAuthToken(response.accessToken)
+    AuthLocalStorage.setAuthTokenExpiresDate(response.expiresDate)
+    UserService.saveUserDataFromModel(response.user)
   }
 }
 

@@ -36,6 +36,8 @@ export default class EN implements LanguageBase {
 
   LOGIN_CANCELED = 'Login canceled.'
 
+  UNKNOW_ERROR = 'Unknow error.'
+
   LOGIN_REFRESH_NECESSARY =
     'Login with error. We need you to authenticate again, please.'
 

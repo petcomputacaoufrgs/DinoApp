@@ -5,9 +5,12 @@ import PathConstants from '../../../constants/app/PathConstants'
 import HistoryService from '../../../services/history/HistoryService'
 import HomeItemProps from './props'
 import './styles.css'
+import { useGoogleOAuth2 } from '../../../context_provider/google_oauth2'
+import GoogleOAuth2Service from '../../../services/auth/google/GoogleOAuth2Service'
 
 const Home = () => {
   const language = useCurrentLanguage()
+  const googleOAuth2 = useGoogleOAuth2()
 
   const items: HomeItemProps[] = [
     { class: '__n', label: language.MENU_NOTES, path: PathConstants.NOTES,},
@@ -18,9 +21,15 @@ const Home = () => {
     { class: '__a', label: language.MENU_ABOUT_US, path: PathConstants.ABOUT_US, },
   ]
 
+  const grantDriveAccess = () => {
+    GoogleOAuth2Service.requestGrant(
+      googleOAuth2, ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/calendar'])
+  }
+
   return (
     <div className="home">
       <div className="home__grid">
+        <button onClick={grantDriveAccess}>Teste</button>
         {items.map((item, index) => (
           <ListItem key={index} button className="home__grid__button">
             <Paper

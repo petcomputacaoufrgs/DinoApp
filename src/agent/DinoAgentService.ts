@@ -32,8 +32,6 @@ class DinoAgentService extends BaseAgent {
   protected onError = (err: any) => {
     if (err.status === HttpStatus.FORBIDDEN) {
       EventService.whenLoginForbidden()
-    } else if (err.status === HttpStatus.PRECONDITION_REQUIRED) {
-      AuthService.setRefreshRequiredToTrue()
     }
   }
 

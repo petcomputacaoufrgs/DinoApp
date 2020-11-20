@@ -7,5 +7,6 @@ export default interface LoginButtonProps {
   onDinoAPIFail?: () => void
   onRefreshTokenLostError?: () => void
   onCancel?: () => void
+  onUnknowError?: () => void
   size?: 'small' | 'medium' | 'large'
 }

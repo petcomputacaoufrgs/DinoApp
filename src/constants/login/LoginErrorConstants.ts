@@ -13,6 +13,9 @@ class LoginStatusConstants {
   DISCONNECTED = 3
 
   LOGIN_CANCELED = 4
+
+  UNKNOW_ERROR = 5
+  
 }
 
 export default new LoginStatusConstants()

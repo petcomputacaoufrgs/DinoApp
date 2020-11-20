@@ -36,6 +36,8 @@ export default class PT implements LanguageBase {
 
   LOGIN_CANCELED = 'Login cancelado.'
 
+  UNKNOW_ERROR = 'Erro desconhecido.'
+
   LOGIN_REFRESH_NECESSARY =
     'Ocorreu um erro. Precisamos que se autentique novamente, por favor.'
 
