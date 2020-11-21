@@ -34,18 +34,6 @@ class AuthLocalStorage extends BaseLocalStorage {
     this.remove(LS_Constants.AUTH_TOKEN_EXPIRES_DATE)
   }
 
-  getGoogleAccessToken = (): string | null => {
-    return this.get(LS_Constants.GOOGLE_ACCESS_TOKEN)
-  }
-
-  setGoogleAccessToken = (googleAccessToken: string) => {
-    this.set(LS_Constants.GOOGLE_ACCESS_TOKEN, googleAccessToken)
-  }
-
-  removeGoogleAccessToken = () => {
-    this.remove(LS_Constants.GOOGLE_ACCESS_TOKEN)
-  }
-
   isRefreshingAccessToken = (): boolean => {
     const value = this.get(LS_Constants.IS_REFRESHING_ACCESS_TOKEN)
 
@@ -88,7 +76,6 @@ class AuthLocalStorage extends BaseLocalStorage {
   removeUserData = () => {
     this.removeAuthToken()
     this.removeAuthTokenExpiresDate()
-    this.removeGoogleAccessToken()
     this.removeRefreshingAccessToken()
     this.removeSuccessRefreshingAccessToken()
   }

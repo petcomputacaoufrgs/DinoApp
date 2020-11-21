@@ -4,13 +4,11 @@ import { ListItem, Paper } from '@material-ui/core'
 import PathConstants from '../../../constants/app/PathConstants'
 import HistoryService from '../../../services/history/HistoryService'
 import HomeItemProps from './props'
-import './styles.css'
-import { useGoogleOAuth2 } from '../../../context_provider/google_oauth2'
 import GoogleOAuth2Service from '../../../services/auth/google/GoogleOAuth2Service'
+import './styles.css'
 
 const Home = () => {
   const language = useCurrentLanguage()
-  const googleOAuth2 = useGoogleOAuth2()
 
   const items: HomeItemProps[] = [
     { class: '__n', label: language.MENU_NOTES, path: PathConstants.NOTES,},
@@ -22,8 +20,7 @@ const Home = () => {
   ]
 
   const grantDriveAccess = () => {
-    GoogleOAuth2Service.requestGrant(
-      googleOAuth2, ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/calendar'])
+    GoogleOAuth2Service.requestGrant(['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/calendar'])
   }
 
   return (

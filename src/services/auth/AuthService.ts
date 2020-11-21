@@ -63,6 +63,8 @@ class AuthService {
 
     this.serverLogout(authToken)
 
+    GoogleOAuth2Service.requestLogout()
+
     EventService.whenLogout()
   }
 
@@ -85,11 +87,7 @@ class AuthService {
   isAuthenticated = (): boolean => Boolean(AuthLocalStorage.getAuthToken())
 
   getGoogleAccessToken = (): string | null => {
-    return AuthLocalStorage.getGoogleAccessToken()
-  }
-
-  setGoogleAccessToken = (token: string) => {
-    AuthLocalStorage.setGoogleAccessToken(token)
+    return GoogleOAuth2Service.getAccessToken()
   }
 
   getAuthToken = (): string => {
@@ -143,7 +141,7 @@ class AuthService {
           const response = await request.setBody(authRequestModel).go()
 
           if (response.status === HttpStatus.OK) {
-            return this.handleLoginSuccess(response, googleResponse)
+            return this.handleLoginSuccess(response)
           }
 
           if (response.status === HttpStatus.INTERNAL_SERVER_ERROR) {
@@ -161,21 +159,14 @@ class AuthService {
     return LoginStatusConstants.EXTERNAL_SERVICE_ERROR
   }
 
-  private handleLoginSuccess = (apiResponse, googleResponse): number => {
+  private handleLoginSuccess = (apiResponse): number => {
     AuthLocalStorage.cleanLoginGarbage()
-
-    this.saveAuthDataFromAPIResponse(googleResponse)
 
     this.saveUserDataFromAPIResponse(apiResponse.body)
 
     EventService.whenLogin()
 
     return LoginStatusConstants.SUCCESS
-  }
-
-  private saveAuthDataFromAPIResponse(googleResponse) {
-    const authResponse = googleResponse.getAuthResponse()
-    this.setGoogleAccessToken(authResponse.access_token)
   }
 
   private saveUserDataFromAPIResponse(response: AuthResponseModel) {

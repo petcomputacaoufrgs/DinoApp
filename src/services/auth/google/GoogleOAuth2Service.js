@@ -10,7 +10,8 @@ class GoogleOAuth2Service {
         await gapi.client.init({
           client_id: GoogleSecrets.client_id,
           api_key: GoogleSecrets.api_key,
-          scope: GoogleAuthScopes.SCOPE_PROFILE
+          scope: GoogleAuthScopes.SCOPE_PROFILE,
+          cookiepolicy: 'single_host_origin'
         })
 
         callback(gapi.auth2)
@@ -21,18 +22,55 @@ class GoogleOAuth2Service {
   }
 
   requestLogin = async (googleOAuth2) => {
-    const response = await googleOAuth2.client.getAuthInstance().signIn()
+    const response = await googleOAuth2.client.getAuthInstance().signIn({
+      "prompt": "consent"
+    })
     return response
   }
 
-  requestGrant = async (googleOAuth2, scopeList) => {
-    const scopeString = scopeList.join(' ')
-    const response = await googleOAuth2.client.currentUser
-      .get().grantOfflineAccess({ 
-        scope: scopeString
+
+  requestLogout = async () => {
+    const authInstance = gapi.auth2.getAuthInstance()
+
+    if (authInstance && authInstance.isSignedIn.get()) {
+      await authInstance.signOut()
+    }
+  }
+
+  getAccessToken = () => {
+    const authInstance = gapi.auth2.getAuthInstance()
+
+    if (authInstance && authInstance.currentUser) {
+      console.log(authInstance)
+      const currentUser = authInstance.currentUser.get()
+      
+      if (currentUser) {
+        const authResponse = currentUser.getAuthResponse()
+
+        if (authResponse) {
+          return authResponse.access_token
+        }
+      }
+    }
+    return null
+  }
+
+
+  requestGrant = async (scopeList) => {
+    const authInstance = gapi.auth2.getAuthInstance()
+
+    if (authInstance && authInstance.currentUser) {
+      const currentUser = authInstance.currentUser.get()
+      const scopeString = scopeList.join(' ')
+
+      const response = await currentUser.grant({
+        scope: scopeString,
+        prompt: "consent",
+        approval_prompt: 'force'
       })
 
-    return response.code
+      console.log(response)
+    }
   } 
 }
 

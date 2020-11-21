@@ -18,7 +18,6 @@ class LocalStorageKeys {
   SAVED_PICTURE = 'sp'
   SAVE_PICTURE_WITH_ERROR = 'spwe'
   NAME = 'n'
-  GOOGLE_ACCESS_TOKEN = 'gat'
   AUTH_TOKEN = 'at'
   AUTH_TOKEN_EXPIRES_DATE = 'ated'
   TEMP_AUTH_TOKEN = 'tat'
