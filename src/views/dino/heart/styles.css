@@ -1,0 +1,56 @@
+.dino__default_heart__1, .dino__default_heart__2 {
+  position: absolute;
+  height: 18vmin;
+  width: 18vmin;
+}
+
+.dino__default_heart__1 {
+  position: absolute;
+  top: 0vmin;
+  left: 40vmin;
+  animation: dino__default_heart_animation__1 2.25s;
+  animation-delay: 1.5s;
+  animation-iteration-count: infinite;
+}
+
+.dino__default_heart__2 {
+  top: 10vmin;
+  left: 60vmin;
+  transform: rotate3d(0,0,1,25deg);
+  animation: dino__default_heart_animation__2 2s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes dino__default_heart_animation__1 {
+  from {
+    height: 5vmin;
+    width: 5vmin;
+    top: 20vmin;
+    left: 53vmin;
+    opacity: 1;
+  }
+  to {
+    height: 18vmin;
+    width: 18vmin;
+    top: 0vmin;
+    left: 40vmin;
+    opacity: 0;
+  }
+}
+
+@keyframes dino__default_heart_animation__2 {
+  from {
+    height: 5vmin;
+    width: 5vmin;
+    top: 25vmin;
+    left: 60vmin;
+    opacity: 1;
+  }
+  to {
+    height: 18vmin;
+    width: 18vmin;
+    top: 10vmin;
+    left: 60vmin;
+    opacity: 0;
+  }
+}

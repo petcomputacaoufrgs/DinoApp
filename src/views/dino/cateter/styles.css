@@ -1,0 +1,35 @@
+.dino__catheter_r, .dino__catheter_l, .dino__bandage_r, .dino__bandage_l {
+  position: absolute;
+}
+
+.dino__catheter_r, .dino__catheter_l {
+  height: 12.5vmin;
+  width: 12.5vmin;
+}
+
+.dino__catheter_l {
+  top: 64.5vmin;
+  transform: rotate3d(0,0,1,180deg);
+  left: 66vmin;
+}
+
+.dino__catheter_r {
+  top: 64.5vmin;
+  left: 36vmin;
+}
+
+.dino__bandage_r, .dino__bandage_l {
+  height: 4vmin;
+  width: 4vmin;
+}
+
+.dino__bandage_l {
+  top: 70vmin;
+  left: 66vmin;
+}
+
+.dino__bandage_r {
+  top: 67.5vmin;
+  left: 46vmin;
+}
+

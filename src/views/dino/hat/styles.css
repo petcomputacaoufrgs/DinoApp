@@ -1,0 +1,13 @@
+.dino__cap, .dino__tall_hat {
+  position: absolute;
+  left: 31vmin;
+  height: 25vmin;
+}
+
+.dino__tall_hat {
+  top: 4vmin;
+}
+
+.dino__cap {
+  top: 9vmin;
+}

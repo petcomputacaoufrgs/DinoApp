@@ -19,6 +19,7 @@ import DataFontSizeUtils from './utils/DataFontSizeUtils'
 import AuthService from './services/auth/AuthService'
 import AboutUs from './views/about'
 import KidsSpace from './views/kids_space'
+import Dino from './views/dino'
 import './App.css'
 
 const LOAD_SCREEN_TIME = 2250
@@ -126,9 +127,11 @@ const App = (): JSX.Element => {
 
 	return (
 		<div className='app'>
-			{showLoadScreen || isLoading ? renderLoad() : renderApp()}
+			<Dino />
 		</div>
 	)
 }
+
+//{showLoadScreen || isLoading ? renderLoad() : renderApp()}
 
 export default App

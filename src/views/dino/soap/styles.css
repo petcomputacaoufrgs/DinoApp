@@ -1,0 +1,42 @@
+.dino__default_soap, .dino__default_soap_bubbles {
+  position: absolute;
+} 
+
+.dino__default_soap {
+  height: 30vmin;
+  width: 30vmin;
+  left: 41vmin;
+  top: 55vmin;
+  animation: dino__default_soap_animation 2s;
+  animation-iteration-count: infinite;
+}
+
+.dino__default_soap_bubbles {
+  height: 37vmin;
+  width: 37vmin;
+  left: 41vmin;
+  top: 38vmin;
+}
+
+@keyframes dino__default_soap_animation {
+  0%   {
+    top: 57.5vmin;
+    left: 42.5vmin;
+  }
+  25%  {
+    top: 52.5vmin;
+    left: 40.5vmin;
+  }
+  50%  {
+    top: 57.5vmin;
+    left: 42.5vmin;
+  }
+  75% {
+    top: 52.5vmin;
+    left: 40.5vmin;
+  }
+  100% {
+    top: 57.5vmin;
+    left: 42.5vmin;
+  }
+}
