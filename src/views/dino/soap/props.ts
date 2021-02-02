@@ -1,3 +1,4 @@
+export type SoapType = 'none' | 'default'
 export default interface SoapProps {
-  type: 'none' | 'default'
+  type: SoapType
 }

@@ -1,3 +1,4 @@
+export type HeartType = 'none' | 'default'
 export default interface HeartProps {
-  type: 'none' | 'default'
+  type: HeartType
 }

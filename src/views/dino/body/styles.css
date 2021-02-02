@@ -1,0 +1,75 @@
+.dino__body {
+  position: absolute;
+  width: 77vmin;
+  height: 77vmin;
+  left: 9vmin;
+  bottom: 0;
+}
+
+.dino__body.green .dark_color {
+  fill:#498a68;
+}
+
+.dino__body.green .main_color {
+  fill:#5cb38e;
+}
+
+.dino__body.green .light_color {
+  fill:#9bdfc1;
+}
+
+.dino__body.yellow .dark_color {
+  fill:#BFB08B;
+}
+
+.dino__body.yellow .main_color {
+  fill: #FFEBBA;
+}
+
+.dino__body.yellow .light_color {
+  fill:#FFF5DC;
+}
+
+.dino__body.pink .dark_color {
+  fill:#BF8399;
+}
+
+.dino__body.pink .main_color {
+  fill:#FFAFCC;
+}
+
+.dino__body.pink .light_color {
+  fill:#FFD7E6;
+}
+
+.dino__body.blue .dark_color {
+  fill:#679bb4;
+}
+
+.dino__body.blue .main_color {
+  fill:#89cff0;
+}
+
+.dino__body.blue .light_color {
+  fill:#c4e7f7;
+}
+
+
+.dino__body.rotate_arms .arm {
+  transform-box: fill-box;
+  animation: dino__body__arm__animation 2s;
+  animation-delay: 0s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes dino__body__arm__animation {
+  0% {
+    transform: rotate3d(0,0,1,0deg)
+  }
+  50% {
+    transform: rotate3d(0,0,1,-45deg)
+  }
+  100% {
+    transform: rotate3d(0,0,1,0deg)
+  }
+}

@@ -1,3 +1,5 @@
+export type HatType = 'none' | 'tall_hat' | 'cap'
+
 export default interface HatProps {
-  type: 'none' | 'tall_hat' | 'cap'
+  type: HatType
 }

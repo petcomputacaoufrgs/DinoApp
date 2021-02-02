@@ -4,8 +4,27 @@
 }
 
 .background {
-  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
   width: auto;
+}
+
+.dino__buttons {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  z-index: 99;
+  width: 100vw;
+  justify-content: center;
+  align-items: center;
+}
+
+.dino__buttons button {
+  margin-top: 0.5rem;
+  width: 50vw;
 }
 
 .dino {
@@ -14,18 +33,4 @@
   width: 95vmin;
   height: 95vmin;
   left: 2.5vmin;
-}
-
-.dino__body {
-  position: absolute;
-  width: 80vmin;
-  height: 80vmin;
-  left: 7.5vmin;
-  bottom: 0;
-}
-
-.character .soap {
-  position: absolute;
-  left: 50%;
-  top: 50%;
 }

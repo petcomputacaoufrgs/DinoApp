@@ -1,10 +1,10 @@
 import React from 'react'
-import CateterProps from './props'
+import CatheterProps from './props'
 import { ReactComponent as CatheterSVG } from '../../../assets/dino/cateter.svg'
 import { ReactComponent as BandageSVG } from '../../../assets/dino/bandage.svg'
 import './styles.css'
 
-const Cateter: React.FC<CateterProps> = ({
+const Catheter: React.FC<CatheterProps> = ({
   position
 }) => (
   <>
@@ -26,4 +26,4 @@ const Cateter: React.FC<CateterProps> = ({
   </>
 )
 
-export default Cateter
+export default Catheter
