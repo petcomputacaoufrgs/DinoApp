@@ -4,6 +4,7 @@ import HistoryService from "../../../services/history/HistoryService"
 import BoardGame from "./board"
 
 const SnakeGame: React.FC = () => {
+    console.log("snake game")
     return(
         <>  
             <BoardGame />
